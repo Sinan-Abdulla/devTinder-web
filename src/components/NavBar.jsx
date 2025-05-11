@@ -2,8 +2,8 @@ import axios from 'axios';
 import React, { memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { BASE_URL } from '../Utiles/constants';
-import { removeUser } from '../utiles/userSlice';
+import { BASE_URL } from '../utils/constants';
+import { removeUser } from '../utils/userSlice';
 
 const NavBar = memo(() => {
 
