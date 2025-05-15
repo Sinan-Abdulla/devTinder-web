@@ -13,7 +13,7 @@ const NavBar = memo(() => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(BASE_URL + "/logout",{},{ withCredentials: true });
+      await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
       dispatch(removeUser());
       return navigate("/login");
 
@@ -54,8 +54,12 @@ const NavBar = memo(() => {
                     <span className="badge">Neww</span>
                   </Link>
                 </li>
-                <li><a>Settings</a></li>
-                <li><a onClick={handleLogout}>Logout</a></li>
+                <li>
+                  <Link to="connections">Connections</Link>
+                </li>
+                <li>
+                  <a onClick={handleLogout}>Logout</a>
+                </li>
               </ul>
             </div>
 
