@@ -1,8 +1,26 @@
+import axios from "axios";
 import React from "react";
+import { BASE_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import {   removeUserFromFeed } from "../utils/feedSlice";
 
 const UserCard = ({ user }) => {
-    const { firstName, lastName, photoUrl, about, age, gender } = user;
-    console.log(user);
+    if (!user) return null;
+    const { _id, firstName, lastName, photoUrl, about, age, gender } = user;
+    const dispatch = useDispatch();
+
+    const handleSendRequest = async (status, userId) => {
+        try {
+            const res = await axios.post(
+                BASE_URL + "/request/send/" + status +"/" + userId,
+                {},
+                { withCredentials: true }
+            )
+            dispatch(removeUserFromFeed(userId));
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
 
 
@@ -12,7 +30,7 @@ const UserCard = ({ user }) => {
         <div className="card bg-base-300 w-96 shadow-sm p-5">
             <figure>
                 <img
-                    src={user.photoUrl || "https://geographyandyou.com/images/user-profile.png"}
+                    src={user.photoUrl}
                     alt="photo" />
             </figure>
             <div className="card-body">
@@ -20,8 +38,10 @@ const UserCard = ({ user }) => {
                 {age && gender && <p>{age + "," + gender}</p>}
                 <p>{about}</p>
                 <div className="card-actions justify-center my-4">
-                    <button className="btn btn-primary">ignore</button>
-                    <button className="btn btn-secondary">interested</button>
+                    <button className="btn btn-primary"
+                        onClick={() => handleSendRequest("ignored", _id)}>ignore</button>
+                    <button className="btn btn-secondary"
+                        onClick={() => handleSendRequest("interested", _id)}>interested</button>
                 </div>
             </div>
         </div>
