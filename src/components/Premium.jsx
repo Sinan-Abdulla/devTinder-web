@@ -9,7 +9,7 @@ const Premium = () => {
     }, []);
 
     const verifyPremuimUser = async () => {
-        const res = await axios.post(BASE_URL + "/payment/verify",{}, {
+        const res = await axios.post(BASE_URL + "/payment/verify", {}, {
             withCredentials: true,
         });
         if (res.data.isPremium) {
@@ -49,7 +49,10 @@ const Premium = () => {
 
 
     return (isUserPremium ? (
-        "uou are already a premium user"
+
+        <h1 className="flex justify-center text-2xl my-10 text-green-300">
+            "you are already a premium user"
+        </h1>
     ) :
         <div className='m-10'>
             <div className="flex w-full">
