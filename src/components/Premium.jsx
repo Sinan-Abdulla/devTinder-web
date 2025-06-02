@@ -9,7 +9,7 @@ const Premium = () => {
     }, []);
 
     const verifyPremuimUser = async () => {
-        const res = await axios.get(BASE_URL + "/payment/verify", {
+        const res = await axios.post(BASE_URL + "/payment/verify",{}, {
             withCredentials: true,
         });
         if (res.data.ispremium) {
