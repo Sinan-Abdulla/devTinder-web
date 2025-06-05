@@ -1,0 +1,84 @@
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { createSocketConnection } from '../utils/socket';
+import { useSelector } from 'react-redux';
+
+const Chat = () => {
+    const { targetUserId } = useParams();
+    const [messages, setMessages] = useState([]);
+    const [input, setInput] = useState('');
+    const user = useSelector((store) => store.user);
+    const userId = user?._id;
+    const socketRef = useRef(null);
+
+    useEffect(() => {
+        if (!userId) return;
+
+        const socket = createSocketConnection();
+        socketRef.current = socket;
+
+        socket.emit("jointChat", {
+            firstName: user.firstName,
+            userId,
+            targetUserId,
+        });
+
+        socket.on("receivemessage", (message) => {
+            setMessages((prev) => [...prev, message]);
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, [userId, targetUserId]);
+
+    const handleSend = () => {
+        if (input.trim() === '') return;
+
+        const message = {
+            firstName: user.firstName,
+            userId,
+            targetUserId,
+            sender: user.firstName,
+            content: input,
+            timestamp: new Date().toLocaleTimeString(),
+            seen: true,
+        };
+
+        socketRef.current?.emit("sendmessage", message);
+        setMessages((prev) => [...prev, message]);
+        setInput('');
+    };
+
+    return (
+        <div className='w-1/2 mx-auto border border-gray-600 m-5 h-[70vh] flex flex-col text-white bg-gray-900'>
+            <h1 className='p-5 border-b border-gray-600'>Chat with {targetUserId}</h1>
+
+            <div className='flex-1 overflow-y-auto p-5 space-y-4'>
+                {messages.map((msg, index) => (
+                    <div key={index} className="chat chat-start">
+                        <div className="chat-header">
+                            {msg.sender}
+                            <time className="text-xs opacity-50 ml-2">{msg.timestamp}</time>
+                        </div>
+                        <div className="chat-bubble">{msg.content}</div>
+                        <div className="chat-footer opacity-50">{msg.seen ? 'Seen' : 'Delivered'}</div>
+                    </div>
+                ))}
+            </div>
+
+            <div className='p-5 border-t border-gray-600 flex items-center gap-2'>
+                <input
+                    className='flex-1 border border-gray-500 text-white rounded p-2 bg-black'
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                    placeholder='Type your message...'
+                />
+                <button className='btn btn-primary' onClick={handleSend}>Send</button>
+            </div>
+        </div>
+    );
+};
+
+export default Chat;
