@@ -93,7 +93,7 @@ const Chat = () => {
                 ))}
             </div>
 
-            <div className='p-5 border-t border-gray-600 flex items-center gap-1'>
+            <div className='p-2 border-t border-gray-600 flex items-center gap-1'>
                 <input
                     className='flex-1 border border-gray-500 text-white rounded p-2 bg-black'
                     value={input}
