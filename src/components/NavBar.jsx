@@ -42,7 +42,7 @@ const NavBar = memo(() => {
                 <div className="w-10 rounded-full">
                   <img
                     alt="User photo"
-                    src={user.photoURL || "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Dulquer_Salmaan_at_Zoya_Factor_Trailer_Launch_function_%28cropped%29.jpg/250px-Dulquer_Salmaan_at_Zoya_Factor_Trailer_Launch_function_%28cropped%29.jpg"} />
+                    src={user.photoUrl} />
                 </div>
               </div>
               <ul
